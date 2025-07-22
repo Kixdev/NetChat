@@ -6,6 +6,9 @@ Built with ❤️ by **Kixdev**
 
 [![Download](https://img.shields.io/github/v/release/Kixdev/NetChat?label=download&include_prereleases)](https://github.com/Kixdev/NetChat/releases/latest)  
 
+## ▶ Demo Video
+[![Watch the NetChat demo](https://img.youtube.com/vi/wmSUGtrYq-s/0.jpg)](https://youtu.be/wmSUGtrYq-s)
+
 > **Status**: Early Alpha - we welcome pull‑requests, issues, and ideas ✨
 
 ---
