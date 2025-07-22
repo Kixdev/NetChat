@@ -2,13 +2,13 @@
 
 Built with ❤️ by **Kixdev**
 
-> **Two‑way LAN messenger** — operator console & lightweight client for internet‑less environments such as gaming cafés, school labs, and factory floors.
+> **Two‑way LAN messenger** - operator console & lightweight client for internet‑less environments such as gaming cafés, school labs, and factory floors.
 
 
 
     
 
-> **Status**: Early Alpha — we welcome pull‑requests, issues, and ideas ✨
+> **Status**: Early Alpha - we welcome pull‑requests, issues, and ideas ✨
 
 ---
 
@@ -16,7 +16,7 @@ Built with ❤️ by **Kixdev**
 
 | Operator                                                 | Client                                                            |
 | -------------------------------------------------------- | ----------------------------------------------------------------- |
-| 🖥️ Modern Electron UI (dark/light)                      | 🪶 Ultra‑light tray app (Electron)                                |
+| 🖥️ Modern Electron UI (dark/light)                      | 🖥️ Ultra‑light tray app (Electron)                                |
 | 📢 Broadcast & direct message per PC                     | 🔔 Floating notifications w/ custom sound                         |
 | 📊 SQLite chat history w/ auto date‑separator            | 💡 Cannot be closed, notifies on forced shutdown                  |
 | 🛑 Instant alert on client shutdown (red banner + siren) | 🎨 Theme switch & asset folder for user sounds                    |
