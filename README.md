@@ -73,13 +73,13 @@ cd ../client && npm ci && npm start
 
 #### 2.1 Sample `client/config.json`
 
-```json
+```jsonc
 {
-  "operatorIp": "192.168.40.1",          // IP address of the PC running NetChat‑Operator
-  "operatorPort": 35444,                 // TCP port (change only if you also change it on Operator)
-  "theme": "dark",                       // "dark" or "light"
-  "notifSoundPath": "D:\Apps\Aplikasi Chat\assets\notif.wav",
-  "appTitle": "Operator Café"            // Window title & sender label
+  "operatorIp":      "192.168.40.1",                         // IP address of the PC running NetChat‑Operator
+  "operatorPort":    35444,                                  // TCP port (change only if you also change it on Operator)
+  "theme":           "dark",                                 // "dark" or "light"
+  "notifSoundPath":  "D:\\Apps\\Aplikasi Chat\\assets\\notif.wav",  // note: doubled back‑slashes!
+  "appTitle":        "Operator Café"                         // Window title & sender label
 }
 ```
 
