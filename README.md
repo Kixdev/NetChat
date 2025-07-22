@@ -4,8 +4,6 @@ Built with ❤️ by **Kixdev**
 
 > **Two‑way LAN messenger** - operator console & lightweight client for internet‑less environments such as gaming cafés, school labs, and factory floors.
 
-
-
     
 
 > **Status**: Early Alpha - we welcome pull‑requests, issues, and ideas ✨
@@ -56,9 +54,9 @@ NetChat/
 
 ### Prerequisites
 
-- **Node.js >= 20** (includes npm)
-- Git
-- Windows 10/11, macOS, or Linux (tested on Ubuntu 22.04)
+* **Node.js >= 20** (includes npm)
+* Git
+* Windows 10/11, macOS, or Linux (tested on Ubuntu 22.04)
 
 ### 1. Clone & Install
 
@@ -73,18 +71,39 @@ cd ../client && npm ci && npm start
 
 ### 2. Configuration
 
-1. Copy the sample file and adjust IP range / sounds.
+#### 2.1 Sample `client/config.json`
+
+```json
+{
+  "operatorIp": "192.168.40.1",          // IP address of the PC running NetChat‑Operator
+  "operatorPort": 35444,                 // TCP port (change only if you also change it on Operator)
+  "theme": "dark",                       // "dark" or "light"
+  "notifSoundPath": "D:\Apps\Aplikasi Chat\assets\notif.wav",
+  "appTitle": "Operator Café"            // Window title & sender label
+}
+```
+
+| Property         | Description                                                                                               | Example                                  |
+| ---------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `operatorIp`     | **Required** - static IP address of the machine running **NetChat‑Operator**.                             | `192.168.40.1`                           |
+| `operatorPort`   | TCP port used by the Operator. Default `35444`.                                                           | `35444`                                  |
+| `theme`          | Client UI colour scheme.                                                                                  | `"dark"`                                 |
+| `notifSoundPath` | Absolute path to a *.wav* notification sound in the `assets` folder. Use doubled back‑slashes on Windows. | `D:\Apps\Aplikasi Chat\assets\notif.wav` |
+| `appTitle`       | Appears in the window title and in the placeholder “Send message to <appTitle>”. Customise per location.  | `"Operator LAB"`                         |
+
+#### 2.2 Initial setup
+
+1. Copy the sample files on each machine:
+
    ```bash
    cp operator/config.sample.json operator/config.json
    cp client/config.sample.json   client/config.json
    ```
-2. All paths inside configs are relative to each app’s directory so they stay portable.
+2. Edit **`client/config.json`** on every client PC: set `operatorIp` to the Operator’s static IP and adjust `appTitle` if needed.
+3. (Optional) edit **`operator/config.json`** if you want to use a different port or asset folder.
+4. All paths are relative except `notifSoundPath`, which must stay absolute so it works from a CCBoot image.
 
-> **Important:** Each **client PC** (including PXE‑boot images) must open `client/config.json` and set the `"server_ip"` field to the **static IP address of the machine running NetChat‑Operator** (e.g. `"192.168.40.1"`). Keep `"server_port"` at `35444` unless you also changed it in `operator/config.json`.
->
-> There should be **exactly one Operator instance** running on the network. Every client points to that single Operator via the IP above.
-
-### 3. Building Portable Executables
+### 3. Building Portable Executables Building Portable Executables
 
 Both apps use **electron‑builder**.
 
@@ -134,9 +153,10 @@ See `CONTRIBUTING.md` for the full guide.
 © 2025 **Kixdev**. Distributed under the **MIT License** — free to use, modify, and distribute, provided that this copyright notice and the license text appear in all copies.
 
 > NetChat bundles third‑party components whose licenses continue to apply:
-> - **Electron** — MIT License
-> - **better‑sqlite3** — MIT License
-> - **bootstrap-icons** — MIT License
+>
+> * **Electron** — MIT License
+> * **better‑sqlite3** — MIT License
+> * **bootstrap-icons** — MIT License
 >
 > See `NOTICE.md` for the full list.
 
@@ -152,10 +172,9 @@ All notable changes are documented in [**CHANGELOG.md**](CHANGELOG.md) and follo
 
 ## 🙏 Acknowledgements
 
-- [Electron](https://electronjs.org)
-- [Node.js](https://nodejs.org)
-- [better‑sqlite3](https://github.com/WiseLibs/better-sqlite3)
-- [lucide‑react](https://github.com/lucide-icons/lucide)
-- **DyGaming Warnet** – first live‑test site, thanks for invaluable feedback. [Instagram](https://www.instagram.com/dygamingbatam/)
-- The broader local Warnet community for stress‑testing the broadcast feature.
-
+* [Electron](https://electronjs.org)
+* [Node.js](https://nodejs.org)
+* [better‑sqlite3](https://github.com/WiseLibs/better-sqlite3)
+* [lucide‑react](https://github.com/lucide-icons/lucide)
+* **DyGaming Warnet** – first live‑test site, thanks for invaluable feedback. [Instagram](https://www.instagram.com/dygamingbatam/)
+* The broader local Warnet community for stress‑testing the broadcast feature.
