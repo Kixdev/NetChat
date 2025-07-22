@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* Gaya dasar untuk body, dibuat transparan dan tanpa margin */
+        body {
+            background: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        /* Kontainer utama notifikasi */
+        .notification-body {
+            background-color: #ffffff;
+            border-radius: 8px;
+            color: #1f2937; /* Warna teks gelap */
+            padding: 16px;
+            animation: slide-in 0.5s forwards;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            position: relative; /* Diperlukan untuk progress bar dan tombol tutup */
+            overflow: hidden;
+        }
+
+        /* Animasi untuk slide-in */
+        @keyframes slide-in {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Gaya untuk ikon/logo aplikasi */
+        .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Pembungkus untuk semua teks */
+        .content-wrapper {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        /* Gaya untuk judul/nama pengirim */
+        .title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #111827; /* Judul lebih gelap */
+            margin: 0 0 2px 0;
+        }
+
+        /* Gaya untuk konten notifikasi */
+        .content {
+            margin: 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #4b5563; /* Konten sedikit lebih terang */
+        }
+
+        /* Tombol Tutup (x) */
+        .close-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 1.5em;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-btn:hover {
+            color: #1f2937;
+        }
+
+        /* Gaya untuk Progress Bar */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background-color: #22c55e; /* Warna hijau solid */
+            animation: shrink 5s linear forwards;
+        }
+
+        @keyframes shrink {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification-body" id="notification">
+        <!-- src akan di-overwrite di script -->
+        <img id="icon" class="icon" src="" alt="icon">
+        <div class="content-wrapper">
+            <h4 id="title" class="title">Notifikasi Baru</h4>
+            <p id="content" class="content">dari...</p>
+        </div>
+        <div id="close-btn" class="close-btn">&times;</div>
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+<script>
+  // Helper untuk resolve path aset (menggunakan IPC sync ke preload)
+  function resolveAsset(filename) {
+    try {
+      const abs = window.api.sendSync('resolve-asset', filename);
+      return `file:///${abs.replace(/\\/g, '/')}`;
+    } catch {
+      return `assets/${filename}`;
+    }
+  }
+
+  const notificationBody = document.getElementById('notification');
+  const closeBtn         = document.getElementById('close-btn');
+  const titleElement     = document.getElementById('title');
+  const contentElement   = document.getElementById('content');
+  const iconElement      = document.getElementById('icon');
+  const progressBar      = document.getElementById('progress-bar');
+  
+  let currentNotificationData = {};
+
+  notificationBody.addEventListener('click', () => {
+    if (currentNotificationData.clientId && currentNotificationData.windowId) {
+      window.api.send('notification-clicked', {
+        clientId: currentNotificationData.clientId,
+        windowId: currentNotificationData.windowId
+      });
+    }
+  });
+
+  closeBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (currentNotificationData.windowId) {
+      window.api.send('close-notification-window', currentNotificationData.windowId);
+    }
+  });
+
+  window.api.on('show-notification', (data) => {
+    currentNotificationData = data;
+    const { type, message, pcName, member } = data;
+
+    progressBar.classList.remove('payment', 'shutdown');
+
+    switch (type) {
+      case 'payment':
+        titleElement.textContent = 'Konfirmasi Pembayaran';
+        // ambil teks setelah "Nama:" hingga sebelum <br>
+        const match = message.content.match(/Nama:\s*([^<]+)<br>/);
+        const sender = match ? match[1].trim() : '(tidak diketahui)';
+        contentElement.textContent = `Dari: ${sender} (${pcName})`;
+        iconElement.src = resolveAsset('payment.png');
+        progressBar.classList.add('payment');
+        break;
+      
+      case 'shutdown':
+        titleElement.textContent = 'Koneksi Klien Terputus';
+        contentElement.textContent = `Klien: ${member.toUpperCase()} (${pcName})`;
+        iconElement.src = resolveAsset('shutdown.png');
+        progressBar.classList.add('shutdown');
+        break;
+
+      default: // 'chat'
+        titleElement.textContent = `Pesan Baru dari ${member.toUpperCase()}`;
+        contentElement.textContent = message.content;
+        iconElement.src = resolveAsset('chat.png');
+        break;
+    }
+    
+    // Fallback jika ikon tidak ditemukan
+    iconElement.onerror = () => {
+      iconElement.src = `data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">❗</text></svg>`;
+    };
+  });
+</script>
+</body>
+</html>

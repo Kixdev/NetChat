@@ -1,0 +1,9 @@
+{
+  "server_ip": "0.0.0.0",
+  "server_port": 35444,
+  "sounds": {
+    "chat": "D:\\Apps\\Aplikasi Chat\\assets\\notif.wav",
+    "payment": "D:\\Apps\\Aplikasi Chat\\assets\\payment.wav",
+    "shutdown": "D:\\Apps\\Aplikasi Chat\\assets\\shutdown.wav"
+  }
+}

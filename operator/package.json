@@ -1,0 +1,51 @@
+{
+  "name": "netchat-operator",
+  "version": "1.0.0",
+  "description": "Aplikasi NetChat untuk Operator",
+  "author": "KIXDEV",
+  "main": "main.js",
+  "scripts": {
+	"postinstall": "electron-rebuild -f -w better-sqlite3",
+    "start": "electron .",
+    "dev": "npm run start",
+    "debug": "electron --inspect=5858 .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder -w portable",
+    "build": "npm run dist"
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "24.11.0",
+    "electron-rebuild": "^3.2.9"
+  },
+  "build": {
+    "appId": "com.kixdev.netchat",
+    "productName": "NetChat Operator",
+    "asar": true,
+    "files": [
+      "**/*",
+      "!dist/**/*",
+      "!node_modules/*/{test,__tests__,examples}/**/*"
+    ],
+    "extraFiles": [
+      {
+        "from": "assets",
+        "to": "assets"
+      },
+      {
+        "from": "config.json",
+        "to": "config.json"
+      }
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": "portable"
+    }
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.2.0"
+  }
+}

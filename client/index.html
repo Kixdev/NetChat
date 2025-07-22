@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; media-src 'self' file:; img-src 'self' data:;">
+    <link href="style.css" rel="stylesheet">
+    <title>NetChat Client</title>
+</head>
+<body>
+    <div class="app-container">
+        <div class="title-bar">
+            <span class="window-title">NetChat Client</span>
+            <div class="window-controls">
+                <button id="minimize-window">–</button>
+                <button id="close-window">×</button>
+            </div>
+        </div>
+
+        <header class="app-header">
+            <div class="header-info">
+                <img id="profile-picture" src="./assets/profile.png" class="profile-pic" alt="profile">
+                <h1 id="app-title">Operator DyGaming</h1>
+            </div>
+            <div class="header-actions">
+                <button id="theme-toggle-button" class="header-button" title="Toggle Tema">
+                    <span id="theme-toggle-icon">🌞</span>
+                </button>
+                <button id="settings-button" class="header-button" title="Pengaturan">
+                    <span role="img" aria-label="settings">⚙️</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="messages-list" id="messages-list"></main>
+
+        <footer class="chat-footer">
+            <button id="payment-button" class="footer-action-button" title="Top Up Billing">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 21z" />
+                </svg>
+            </button>
+
+            <div class="chat-input-container">
+                <button id="emoji-button" class="emoji-btn" title="Emoji" aria-label="Emoji Picker">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-smile">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 15s1.5 2 4 2 4-2 4-2"></path>
+                        <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                        <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    </svg>
+                </button>
+                <textarea id="message-input" placeholder="Ketik pesan..." rows="1"></textarea>
+                <button id="send-button" class="send-btn" title="Kirim">➤</button>
+            </div>
+
+            <div id="emoji-picker" class="emoji-picker hidden"></div>
+        </footer>
+
+        <a href="https://forms.gle/7VJUu7Wd5R9gSaLL8"      
+            target="_blank"                             
+            rel="noopener noreferrer"
+            class="app-credit-footer">
+            App by Kixdev
+        </a>
+    </div>
+
+    <div id="settings-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <h3 class="modal-title">Pengaturan Klien</h3>
+            <div class="form-group">
+                <label for="header-title-input">Judul Header</label>
+                <input type="text" id="header-title-input" placeholder="Contoh: NetCafe A">
+            </div>
+
+            <div class="form-group">
+                <label for="notif-sound-input">Suara Notifikasi</label>
+                <input type="text" id="notif-sound-input" readonly placeholder="Klik untuk memilih file suara...">
+            </div>
+            <div class="modal-actions">
+                <button id="save-settings-button" class="button-primary">Simpan dan Terapkan</button>
+                <button class="button-secondary close-modal-button">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="payment-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <h3 class="modal-title">Top Up Billing via QRIS</h3>
+            <div class="qris-container">
+                <img id="qris-image" src="./assets/qris.png" alt="QRIS Code">
+            </div>
+            <div class="form-group">
+                <label for="sender-name-input">Nama Pengirim (Bank / E-Wallet)</label>
+                <input type="text" id="sender-name-input" placeholder="Masukkan nama Anda...">
+            </div>
+            <div class="form-group">
+                <label for="topup-amount-input">Jumlah Top Up (Rp)</label>
+                <input type="text" id="topup-amount-input" placeholder="Contoh: 50000">
+            </div>
+            <div class="form-group">
+                <label for="payment-method-input">Nama / ID Member Anda atau Teman</label>
+                <input type="text" id="payment-method-input" placeholder="Masukkan Nama Member...">
+            </div>
+            <div class="modal-actions">
+                <button id="submit-payment-button" class="button-primary" disabled>Kirim Konfirmasi</button>
+                <button class="button-secondary close-modal-button">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Script tema -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggleButton = document.getElementById('theme-toggle-button');
+        const themeIcon = document.getElementById('theme-toggle-icon');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        let darkMode = localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && prefersDark);
+
+        function applyTheme() {
+            document.body.classList.toggle('dark-mode', darkMode);
+            themeIcon.textContent = darkMode ? '🌙' : '🌞';
+            localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+        }
+
+        themeToggleButton.addEventListener('click', () => {
+            darkMode = !darkMode;
+            applyTheme();
+        });
+
+        applyTheme();
+    });
+    </script>
+
+    <script src="./renderer.js"></script>
+</body>
+</html>

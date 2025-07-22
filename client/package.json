@@ -1,0 +1,51 @@
+{
+  "name": "netchat-client",
+  "version": "1.0.0",
+  "description": "Aplikasi NetChat untuk Client",
+  "author": "KIXDEV",
+  "main": "main.js",
+
+  "scripts": {
+    "start": "electron .",
+    "dev": "npm run start",
+    "debug": "electron --inspect=5858 .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder -w portable",
+    "build": "npm run dist"
+  },
+
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "24.11.0"
+  },
+
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+
+  "build": {
+    "appId": "com.netchat.client",
+    "productName": "NetChat Client",
+    "asar": true,
+
+    "files": [
+      "**/*",
+      "!dist/**/*",
+      "!node_modules/*/{test,__tests__,examples}/**/*"
+    ],
+
+    "extraFiles": [
+      { "from": "assets",      "to": "assets" },
+      { "from": "config.json", "to": "config.json" }
+    ],
+
+    "directories": {
+      "output": "dist"
+    },
+
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": "portable"
+    }
+  }
+}

@@ -1,0 +1,765 @@
+/* style.css - Lembar Gaya Utama untuk Aplikasi Operator NetChat */
+
+/* --- Variabel Warna untuk Tema --- */
+/* Menggunakan variabel CSS (custom properties) memungkinkan kita untuk
+  mengubah seluruh skema warna aplikasi dengan mudah hanya dengan
+  mengubah nilai di satu tempat. Ini adalah dasar dari tema gelap/terang.
+*/
+:root {
+    --bg-primary: #23272a;
+    --bg-secondary: #2c2f33;
+    --bg-tertiary: #36393f;
+    --bg-interactive: #40444b;
+    --text-primary: #ffffff;
+    --text-secondary: #b9bbbe;
+    --text-muted: #72767d;
+    --accent-primary: #2653f5;
+    --accent-hover: #677bc4;
+    --border-color: #2c2f33;
+    --success-color: #43b581;
+    --danger-color: #f04747;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --link-color: #ffffff; 
+}
+
+body.light-mode {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f2f3f5;
+    --bg-tertiary: #e3e5e8;
+    --bg-interactive: #d4d7dc;
+    --text-primary: #060607;
+    --text-secondary: #4f5660;
+    --text-muted: #5c6470;
+    --accent-primary: #1a46e4;
+    --accent-hover: #4752c4;
+    --border-color: #e3e5e8;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --link-color: var(--accent-primary);
+}
+
+/* --- Gaya Dasar & Reset --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    overflow: hidden; /* Mencegah scroll di level body */
+    height: 100vh;
+    user-select: none; /* Mencegah seleksi teks yang tidak diinginkan */
+}
+
+/* [PERBAIKAN] Kelas utilitas generik untuk menyembunyikan elemen. Ini adalah perbaikan bug utama. */
+.hidden {
+    display: none !important;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* --- Gaya Scrollbar Elegan --- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--bg-interactive);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+}
+
+/* --- Sidebar (Panel Kiri) --- */
+.sidebar {
+    width: 300px;
+    min-width: 300px; /* Batas minimal lebar sidebar */
+    max-width: 500px; /* Batas maksimal lebar sidebar */
+    background-color: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+}
+
+.sidebar-header {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.client-counter {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 10px;
+}
+.client-counter span {
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+#search-client-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid var(--bg-secondary);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.9em;
+}
+
+#search-client-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.client-list-container {
+    flex-grow: 1;
+    overflow-y: auto; /* Hanya daftar klien yang bisa di-scroll */
+}
+
+.client-list {
+    list-style-type: none;
+}
+
+.client-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.client-item:hover {
+    background-color: var(--bg-secondary);
+}
+
+.client-item.active {
+    background-color: var(--bg-interactive);
+    border-left-color: var(--accent-primary);
+}
+
+.status-icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.status-icon.online { background-color: var(--success-color); }
+.status-icon.offline { background-color: var(--danger-color); }
+
+.client-name {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.unread-badge {
+    background-color: var(--accent-primary);
+    color: white;
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 8px;
+    margin-left: 8px;
+}
+
+.client-item .timestamp {
+    margin-left: auto;
+    font-size: 0.8em;
+    color: var(--text-muted);
+    padding-left: 10px;
+    flex-shrink: 0;
+}
+
+.sidebar-footer-wrapper {
+    margin-top: auto; /* Mendorong footer ke bawah */
+    flex-shrink: 0;
+}
+
+.sidebar-footer {
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-button {
+    flex-grow: 1;
+    background: var(--bg-secondary);
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.footer-button:hover {
+    background-color: var(--bg-interactive);
+    color: var(--text-primary);
+}
+
+/* Footer aplikasi (Operator) */
+.app-footer{
+  display:block;      /* ← kunci agar selebar container */
+  width:100%;
+  text-align:center;  /* sudah ada; biar pasti tetap */
+  font-size: 0.9em;           /* ↑ dari 0.75em → lebih terbaca */
+  font-weight: 600;           /* sedikit lebih tebal */
+  text-align: center;
+  padding: 10px 0;
+  color: var(--text-muted);
+  background-color: var(--bg-primary);
+  text-decoration: none;      /* hilangkan underline default <a> */
+  transition: color .2s ease;
+}
+
+.app-footer:hover{
+  color: var(--accent-primary);  /* ganti warna saat hover */
+}
+
+
+/* --- Handle Pengubah Ukuran Sidebar --- */
+.resizer {
+    width: 5px;
+    cursor: col-resize; /* Kursor kolom saat di-hover */
+    background-color: var(--bg-primary);
+    transition: background-color 0.2s;
+}
+
+.resizer:hover {
+    background-color: var(--accent-primary);
+}
+
+/* --- Panel Chat (Panel Kanan) --- */
+.chat-panel {
+    flex-grow: 1;
+    background-color: var(--bg-tertiary);
+    display: flex;
+    flex-direction: column;
+}
+
+.welcome-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 20px;
+}
+
+.shortcut-info {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: var(--text-muted);
+}
+
+.conversation-view {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Memastikan kontainer ini mengisi sisa ruang */
+    min-height: 0; /* Mencegah flex item meluap dari kontainernya */
+}
+
+.chat-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0; /* Mencegah header menyusut */
+}
+
+/* --- Gaya Bubble Chat --- */
+.messages-list {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    max-width: 85%;
+}
+
+.message-wrapper.received { align-self: flex-start; }
+.message-wrapper.sent { align-self: flex-end; flex-direction: row-reverse; }
+
+/* Efek bubble secara umum */
+.message-bubble {
+    padding: 12px 18px;
+    border-radius: 18px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: scale(0.98) translateY(10px);
+    animation: bubbleIn 0.35s ease forwards;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* ─────────────────── Link di dalam pesan ─────────────────── */
+
+/* aturan umum – underline + hover */
+.chat-link,
+.chat-link:visited {                 /* ← tambahkan :visited */
+  color: var(--link-color);          /* ikut variabel tema   */
+  text-decoration: underline;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.chat-link:hover { opacity:.8; }
+
+/* link di bubble pesan MASUK, KHUSUS dark‑mode → putih  */
+body.dark-mode .message-wrapper.received .chat-link,
+body.dark-mode .message-wrapper.received .chat-link:visited {
+  color:#ffffff;
+}
+
+/* bubble yang DITERIMA (abu/gelap)                       */
+/* pakai warna aksen agar kontras di gelap & terang       */
+.message-wrapper.received .chat-link{
+  color: var(--accent-primary);
+}
+
+/* bubble yang DIKIRIM operator (biru) → link putih       */
+.message-wrapper.sent .chat-link{
+  color:#ffffff;
+}
+
+/* (opsional) bubble system broadcast, dsb.               */
+/* .message-wrapper.system .chat-link{ color:var(--accent-primary);} */
+
+
+
+/* Efek ekor & warna bubble */
+.message-wrapper.received .message-bubble {
+    background-color: var(--bg-interactive);
+    color: var(--text-primary);
+    border-bottom-left-radius: 4px;
+}
+
+.message-wrapper.sent .message-bubble {
+    background-color: var(--accent-primary);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+/* Animasi masuk */
+@keyframes bubbleIn {
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+
+.timestamp {
+    color: var(--text-muted);
+    font-size: 0.75em;
+    flex-shrink: 0;
+}
+
+.message-wrapper.system {
+  background: #ffebee;
+  color: #c62828;
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin: 12px auto;
+  width: fit-content;
+  max-width: 75%;
+  font-weight: bold;
+}
+
+/* --- Footer Chat (Input Pesan) --- */
+.chat-footer {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background-color: #e3e6ea; /* warna latar belakang footer */
+    border-top: 1px solid #ccc;
+    gap: 12px;
+}
+
+.input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fb;
+    border-radius: 14px;
+    padding: 10px 14px;
+    gap: 8px;
+}
+
+#message-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    resize: none;
+    font-size: 16px;
+    font-family: "Segoe UI", sans-serif;
+    color: #333;
+    font-weight: 500;
+    outline: none;
+    line-height: 1.4;
+}
+
+#message-input:focus { outline: none; }
+
+.input-action-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#message-input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.input-action-button:hover { color: var(--text-primary); }
+
+#send-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background-color: #4e8cff;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    box-shadow: 0 2px 10px rgba(0, 123, 255, 0.25);
+    padding: 0;
+}
+
+#send-button:hover {
+    background-color: #3a6fdc;
+    transform: scale(1.05);
+}
+
+.send-icon {
+    stroke: #ffffff;
+    width: 22px;
+    height: 22px;
+}
+
+/* --- Pemilih Emoji --- */
+#emoji-picker {
+    position: absolute;
+    bottom: 85px; /* Posisi di atas footer */
+    right: 20px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--bg-secondary);
+    border-radius: 8px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 5px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+}
+
+#emoji-picker span {
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 5px;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+#emoji-picker span:hover { background-color: var(--bg-interactive); }
+
+/* --- Gaya Modal (Pop-up) --- */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--bg-primary);
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-title { font-size: 1.5em; font-weight: 600; }
+
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group label { font-weight: 600; color: var(--text-secondary); font-size: 0.9em; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--bg-secondary);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1em;
+}
+.form-group input[readonly] {
+    cursor: pointer;
+}
+.form-group input[readonly]:hover {
+    border-color: var(--accent-primary);
+}
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Aturan khusus untuk memperbesar font di textarea broadcast */
+#broadcast-message {
+    font-size: 19px;
+}
+
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+.button-primary {
+    background-color: var(--accent-primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+.button-primary:hover { background-color: var(--accent-hover); }
+
+.button-secondary {
+    background-color: var(--bg-interactive);
+    color: var(--text-primary);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+.button-secondary:hover { filter: brightness(1.1); }
+
+/* Gaya untuk Menu Konteks (Simulasi) */
+.context-menu {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--bg-secondary);
+    border-radius: 6px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    padding: 5px;
+    z-index: 2000;
+}
+.context-menu div {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.context-menu div:hover {
+    background-color: var(--accent-primary);
+    color: white;
+}
+
+
+/* Input Chat Modern */
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #1e1e2f; /* Warna gelap elegan */
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.25);
+}
+
+#chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    background-color: #2b2b3c;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #fff;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.25);
+}
+
+.date-separator {
+  text-align: center;
+  margin: 12px 0;
+  font-size: 0.85em;
+  color: #6b7280;
+}
+
+
+#chat-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+}
+
+#chat-input:focus {
+    background-color: #33334d;
+    box-shadow: 0 0 0 2px #4e8cff;
+}
+
+#send-btn {
+    padding: 10px 18px;
+    background-color: #4e8cff;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
+
+#send-btn:hover {
+    background-color: #3a6fdc;
+}
+
+
+/* Notifikasi Shutdown */
+.notification.shutdown {
+    background-color: #ff4c4c !important;
+    color: white;
+    font-weight: bold;
+}
+
+/* Khusus pesan “shutdown paksa” */
+.message-wrapper.system.shutdown {
+  background: #ff1744;
+  color: #fff;
+  font-size: 1.1em;
+  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.1);
+}
+
+.message-bubble.shutdown {
+  background: #ffdddd;
+  color: #c00;
+  font-weight: bold;
+}
+
+
+/* Broadcast Style */
+.broadcast-message {
+    font-size: 20px;
+    font-weight: bold;
+    color: #222;
+    background: #ffe48b;
+    border-left: 5px solid orange;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+/* === DARK MODE: Input Chat Area === */
+body.dark-mode .chat-footer {
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--border-color);
+}
+
+body.dark-mode .input-wrapper {
+    background-color: var(--bg-interactive);
+    border-radius: 14px;
+    padding: 10px 14px;
+    box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode #message-input {
+    background-color: transparent;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Segoe UI", sans-serif;
+    border: none;
+    outline: none;
+}
+
+body.dark-mode #message-input::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+body.dark-mode .input-action-button {
+    color: var(--text-secondary);
+}
+
+body.dark-mode #send-button {
+    background-color: var(--accent-primary);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+body.dark-mode #send-button:hover {
+    background-color: var(--accent-hover);
+}
+
+#member-list li {
+  cursor: pointer;
+  padding: 0.5em;
+}
+#member-list li:hover {
+  background: #f0f0f0;
+}
+
+#member-list-modal .modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 16px;
+}
+#member-list-modal #member-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#member-list-modal #member-list li {
+  padding: 8px 4px;
+  cursor: pointer;
+}
+#member-list-modal #member-list li:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+#member-search-input {
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+/* Sembunyikan tombol Pengaturan (⚙️) */
+#settings-button { display: none !important; }
