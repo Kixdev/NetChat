@@ -4,7 +4,7 @@ Built with ❤️ by **Kixdev**
 
 > **Two‑way LAN messenger** - operator console & lightweight client for internet‑less environments such as gaming cafés, school labs, and factory floors.
 
-[![Download](https://img.shields.io/github/v/release/Kixdev/NetChat?label=download)](https://github.com/Kixdev/NetChat/releases/latest)    
+[![Download](https://img.shields.io/github/v/release/Kixdev/NetChat?label=download&include_prereleases)](https://github.com/Kixdev/NetChat/releases/latest)  
 
 > **Status**: Early Alpha - we welcome pull‑requests, issues, and ideas ✨
 
